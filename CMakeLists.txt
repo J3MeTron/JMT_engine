@@ -2,4 +2,4 @@ cmake_minimum_required(VERSION 3.24.2 FATAL_ERROR)
 
 project(JMT_Engine)
 
-add_executeble(JMT_Engine src/main.cpp)
+add_executable(JMT_Engine src/main.cpp)
