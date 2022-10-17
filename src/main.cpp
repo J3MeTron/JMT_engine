@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#include "Renderer/ShaderProgram.h"
+
 GLfloat point[] = {     //массив точек
      0.0f,  0.5f, 0.0f,
      0.5f, -0.5f, 0.0f,
@@ -93,24 +95,14 @@ int main(void)
 
     glClearColor(1, 1, 0, 1);
 
-    GLuint vs = glCreateShader(GL_VERTEX_SHADER);       //объ€вление шейдера vertex
-    glShaderSource(vs, 1, &vertex_shader, nullptr);
-    glCompileShader(vs);
-
-
-    GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);       //объ€вление шейдера fragment
-    glShaderSource(fs, 1, &fragment_shader, nullptr);
-    glCompileShader(fs);
-
-    /*линковка шейдеров*/
-    GLuint shader_program = glCreateProgram();
-    glAttachShader(shader_program, vs);
-    glAttachShader(shader_program, fs);
-    glLinkProgram(shader_program);
-
-    /*”дал€ем ненужные шейдеры из пам€ти*/
-    glDeleteShader(vs);
-    glDeleteShader(vs);
+    std::string vertexShader(vertex_shader);
+    std::string fragmentShader(fragment_shader);
+    Renderer::ShaderProgram shaderProgram(vertexShader, fragmentShader);
+    if (!shaderProgram.isCompiled()) 
+    {
+        std::cerr << " Can't create shader program!" << std::endl;
+        return -1;
+    }
 
     /*ѕередача данных в видеокарту (цвета и точки)                        (&name - ссылка на переменную)*/
     GLuint point_vbo = 0;
@@ -143,7 +135,7 @@ int main(void)
         glClear(GL_COLOR_BUFFER_BIT);
 
         /*ќтрисовка треугольника*/
-        glUseProgram(shader_program);
+        shaderProgram.use();
         glBindVertexArray(vao);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
