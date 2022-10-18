@@ -85,6 +85,8 @@ int main(int argc, char** argv)
             return -1;
         }
 
+        resourceManager.loadTexture("DefaultTexture", "res/textures/map_16x16.png");
+
         /*Передача данных в видеокарту (цвета и точки)                        (&name - ссылка на переменную)*/
         GLuint point_vbo = 0;
         glGenBuffers(1, &point_vbo);
