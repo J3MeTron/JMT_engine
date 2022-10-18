@@ -5,6 +5,7 @@
 
 #include "Renderer/ShaderProgram.h"
 #include "Resources/ResourceManager.h"
+#include "Renderer/Texture2D.h"
 
 GLfloat point[] = {     //массив точек
      0.0f,  0.5f, 0.0f,
@@ -19,18 +20,24 @@ GLfloat colors[]{       //массив цветов
     0.0f, 0.0f, 1.0f
 };
 
+GLfloat texCoord[]{       //массив текстуры
+    0.5f, 1.0f, 
+    1.0f, 0.0f, 
+    0.0f, 0.0f
+};
+
 
 int g_windowSizeX = 640;
 int g_windowSizeY = 480;
 
-void glfwWindowSizeCallback(GLFWwindow* pWindow,int wight, int height) 
+void glfwWindowSizeCallback(GLFWwindow* pWindow,int wight, int height) noexcept
 {
     g_windowSizeX = wight;
     g_windowSizeY = height;
     glViewport(0, 0, g_windowSizeX, g_windowSizeY);
 }
 
-void glfwKeyCallback(GLFWwindow* pWindow, int key, int scancode, int action, int mode) 
+void glfwKeyCallback(GLFWwindow* pWindow, int key, int scancode, int action, int mode) noexcept
 {
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) 
     {
@@ -38,7 +45,7 @@ void glfwKeyCallback(GLFWwindow* pWindow, int key, int scancode, int action, int
     }
 }
 
-int main(int argc, char** argv)
+int main(int argc, char** const argv)
 {
     /* Initialize the library */
     if (!glfwInit()) 
@@ -85,7 +92,7 @@ int main(int argc, char** argv)
             return -1;
         }
 
-        resourceManager.loadTexture("DefaultTexture", "res/textures/map_16x16.png");
+        auto tex = resourceManager.loadTexture("DefaultTexture", "res/textures/map_16x16.png");
 
         /*Передача данных в видеокарту (цвета и точки)                        (&name - ссылка на переменную)*/
         GLuint point_vbo = 0;
@@ -99,6 +106,11 @@ int main(int argc, char** argv)
         glBindBuffer(GL_ARRAY_BUFFER, colors_vbo);
         glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW);
 
+        GLuint texCoord_vbo = 0;
+        glGenBuffers(1, &texCoord_vbo);
+        glBindBuffer(GL_ARRAY_BUFFER, texCoord_vbo);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(texCoord), texCoord, GL_STATIC_DRAW);
+
         GLuint vao = 0;
         glGenVertexArrays(1, &vao);
         glBindVertexArray(vao);
@@ -111,6 +123,13 @@ int main(int argc, char** argv)
         glBindBuffer(GL_ARRAY_BUFFER, colors_vbo);
         glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
 
+        glEnableVertexAttribArray(2);
+        glBindBuffer(GL_ARRAY_BUFFER, texCoord_vbo);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+
+        pDefaultShaderProgram->use();
+        pDefaultShaderProgram->setInt("tex", 0);
+
         /* Loop until the user closes the window */
         while (!glfwWindowShouldClose(pWindow))
         {
@@ -120,6 +139,7 @@ int main(int argc, char** argv)
             /*Отрисовка треугольника*/
             pDefaultShaderProgram->use();
             glBindVertexArray(vao);
+            tex->bind();
             glDrawArrays(GL_TRIANGLES, 0, 3);
 
             /* Swap front and back buffers */

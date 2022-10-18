@@ -7,14 +7,15 @@ namespace Renderer
 		const unsigned char* data,
 		const unsigned int channels,
 		const GLenum filter,
-		const GLenum wrapMode)
-		:m_wight(wight)
+		const GLenum wrapMode) 
+		: m_wight(wight)
 		, m_height(height)
 	{	
 		switch (channels)
 		{
 		case 4:
 			m_mode = GL_RGBA;
+			break;
 		case 3:
 			m_mode = GL_RGB;
 		default:
@@ -22,6 +23,7 @@ namespace Renderer
 			break;
 		}
 		glGenTextures(1, &m_ID);
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, m_ID);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, m_wight, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
 
@@ -36,7 +38,7 @@ namespace Renderer
 	}
 
 
-	Texture2D& Texture2D:: operator = (Texture2D&& texture2d)
+	Texture2D& Texture2D:: operator = (Texture2D&& texture2d) 
 	{
 		glDeleteTextures(1, &m_ID);
 		m_ID = texture2d.m_ID;
@@ -59,7 +61,7 @@ namespace Renderer
 		glDeleteTextures(1, &m_ID);
 	}
 
-	void Texture2D::bind() const
+	void Texture2D::bind() const 
 	{
 		glBindTexture(GL_TEXTURE_2D, m_ID);
 	}
