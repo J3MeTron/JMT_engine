@@ -1,5 +1,6 @@
 #include <glad/glad.h>  //add glad library
 #include <GLFW/glfw3.h> //add glfw library
+#include <glm/vec2.hpp>
 
 #include <iostream>
 
@@ -27,14 +28,13 @@ GLfloat texCoord[]{       //массив текстуры
 };
 
 
-int g_windowSizeX = 640;
-int g_windowSizeY = 480;
+glm::vec2 g_windowSize(640, 480);
 
 void glfwWindowSizeCallback(GLFWwindow* pWindow,int wight, int height) noexcept
 {
-    g_windowSizeX = wight;
-    g_windowSizeY = height;
-    glViewport(0, 0, g_windowSizeX, g_windowSizeY);
+    g_windowSize.x;
+    g_windowSize.y;
+    glViewport(0, 0, g_windowSize.x, g_windowSize.y);
 }
 
 void glfwKeyCallback(GLFWwindow* pWindow, int key, int scancode, int action, int mode) noexcept
@@ -59,7 +59,7 @@ int main(int argc, char** const argv)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
-    GLFWwindow* pWindow = glfwCreateWindow(g_windowSizeX, g_windowSizeY, "JMT_Engine", nullptr, nullptr);
+    GLFWwindow* pWindow = glfwCreateWindow(g_windowSize.x, g_windowSize.y, "JMT_Engine", nullptr, nullptr);
     if (!pWindow)
     {
         std::cout << "glfwCreateWindow failed!" << std::endl;
