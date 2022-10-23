@@ -11,5 +11,6 @@ OpenGL (Open Graphics Library) — спецификация, определяю�
 
 
 
-
+Используемые ресурсы:
 Данная работа выполняется по курсу - https://www.youtube.com/watch?v=wf37ukItjE8&list=PL6x9Hnsyqn2XU7vc8-oFLojbibK91fVd-
+https://learnopengl.com/
