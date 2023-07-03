@@ -95,6 +95,7 @@ public:
     double getMaxVelocity() const { return m_maxVelocity; }
     void setVelocity(const double velocity) override;
     void fire();
+    
 
 private:
     EOrientation m_eOrientation;
@@ -125,4 +126,5 @@ private:
     std::unique_ptr<AIComponent> m_pAIComponent;
 
     static const std::string& getTankSpriteFromType(const ETankType eType);
+    
 };
